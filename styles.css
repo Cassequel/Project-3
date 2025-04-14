@@ -1,0 +1,101 @@
+body{
+    padding: 0;
+    margin: 0;
+}
+
+a{
+    text-decoration: none;
+    color: black;
+}
+
+.hero-section{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid purple;
+    z-index: 2;
+}
+
+.hero-section img{
+    height: 5%;
+    object-fit: cover;
+}
+
+nav{
+    height: auto;
+    display: flex;
+    padding: 10px 20px;
+}
+
+nav a{
+    color: white;
+    padding: 10px 0;
+}
+
+.menu-toggle {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.menu-toggle div {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+}
+
+.nav-links {
+    display: none;
+    flex-direction: column;
+}
+
+.nav-links.active {
+    display: flex;
+}
+
+/* Desktop mode */
+@media (min-width: 600px) {
+    nav {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .menu-toggle {
+        display: none;
+    }
+
+    .nav-links {
+        display: flex !important;
+        flex-direction: row;
+        gap: 20px;
+        margin: 0;
+    }
+
+    nav a {
+        padding: 0;
+    }
+}
+
+header{
+    border: 2px solid green;
+    background-color: black;
+}
+
+.gateway{
+    width: 100%;
+    display: grid;
+    border: 1px solid black;
+}
+
+.partners{
+    width: 100%;
+    border: 1px solid black;
+}
+
+.airports{
+    width: 100%;
+    border: 1px solid black;
+}
