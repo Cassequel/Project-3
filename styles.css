@@ -5,13 +5,28 @@ body{
     max-width: 100vw;
 }
 
-*{
-    box-sizing: border-box;
+html {
+    scroll-behavior: smooth;
 }
 
+section{
+    width: 100%;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+/* * {
+    border: 1px solid red !important;
+} */
+
+
 a{
+    font-family: "raleway";
     text-decoration: none;
     color: black;
+}
+
+a:hover{
+    text-decoration: underline;
 }
 
 .hero-section{
@@ -25,7 +40,7 @@ a{
 
 header {
     width: 100%;
-    background-color: black;
+    background-color: white;
     overflow: hidden;
     max-height: 15vh;
     transition: max-height 0.4s ease;
@@ -59,17 +74,22 @@ nav{
     box-sizing: border-box;
 }
 
-.nav-top img{
-    max-height: 80%;
-    object-fit: contain;
-    height: auto;
+.nav-top-img{
+    width: 100%;
+    height: 7rem;
+    background-size: cover;
+    background-position: left center;
+    background-size: auto 100%;
+    background-repeat: no-repeat;
+    background-image: url(Ty&Aiden-Black.png);
 }
 
 nav a{
-    color: white;
+    color: black;
     padding: 10px 0;
     font-family: "raleway";
 }
+
 
 .menu-toggle {
     display: flex;
@@ -84,7 +104,7 @@ nav a{
 .menu-toggle div {
     width: 25px;
     height: 3px;
-    background-color: white;
+    background-color: black;
     transition: all 0.3s ease;
 }
 
@@ -109,31 +129,58 @@ nav a{
 
 
 .quote-section{
-    width: 100%;
-    height: auto;
+    min-width: 100%;
+    min-height:90vh;
     position: relative;
     box-sizing: border-box;
     padding: 0;
     margin: 0;
+    overflow: hidden;
 }
 
-.quote-text{
+.quote-section video {
     position: absolute;
-    padding: 2rem;
-}
-
-.quote-section img{
+    max-width: 100%;
+    min-height: 90vh;
     object-fit: cover;
-    height: 40vh;
-    width: 100%;
-    object-position: center;
     z-index: 0;
 }
 
-.quote-buttons{
-    position: absolute;
+.quote-content{
+    position: relative;
+    z-index: 2;
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: left;
+    color: white;
+}
+
+.quote-text{
     padding: 2rem;
-    margin-top: 7rem;
+}
+
+.quote-text h1{
+    font-family: "Special Gothic Condensed One";
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    margin-bottom: 2rem;
+    font-size: 4rem;
+}
+
+.quote-buttons{
+    position: relative;
+    margin: 2rem;
+}
+
+.quote-buttons a{
+        color: white;
+        padding: 1rem;
+        border-radius: 10px;
+        background-color: #a8763e;
+        font-family: "Special Gothic Condensed One";
+        font-size: 2rem;
 }
 
 
@@ -145,27 +192,34 @@ nav a{
 .gateway-title{
     justify-self: center;
     padding: 1rem;
+    font-family: "Special Gothic Condensed One";
 }
 
 .gateway-grid-section{
     width: 100%;
     display: grid;
-    grid-template-columns: 50% 50%;
-    grid-template-rows: auto;
+    grid-template-columns: 1fr;
     gap: 10px;
-    height: auto;
+    padding: 10px;
     box-sizing: border-box;
-    border-radius: 2px solid orange;
+    overflow: hidden;
+    background-color: #a8763e;
 }
 
-.card{
+.card {
+    background-color: white;
+    border: 4px solid #353d2f;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: ;
     overflow: hidden;
+    box-shadow: 2px 2px 10px black;
+    border-radius: 10px;
+}
 
+.card-text{
+    font-family: "raleway";
 }
 
 .card-img{
@@ -184,6 +238,11 @@ nav a{
     max-height: 100%;
 }
 
+.airline-button{
+    text-align: center;
+    padding: 2rem;
+}
+
 .partners{
     width: 100%;
     border: 1px solid black;
@@ -192,12 +251,12 @@ nav a{
 .scroll-container {
     position: relative;
     overflow: hidden;
-    width: 100%;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
 }
 
 .scroll-track {
     display: flex;
-    width: max-content;
     animation: scroll-left 20s linear infinite;
     gap: 2rem;
     padding: 2rem;
@@ -205,8 +264,8 @@ nav a{
 
 .scroll-track img {
     height: 5rem;
-    width: auto;
     margin-right: 1rem;
+    max-width: 120px;
     flex-shrink: 0;
 }
 
@@ -221,24 +280,172 @@ nav a{
 }
 
 .airports{
-    width: 100%;
-    border: 1px solid black;
-    height: 100vh;
+    max-width: 100vw;
+    height: auto;
     box-sizing: border-box;
+}
+
+.airport-title{
+    font-family: "Special Gothic Condensed One";
+    text-align: center;
+    font-size: 2rem;
+}
+
+.tableauPlaceholder{
+    touch-action: none;
+}
+
+footer{
+    width: 100%;
+    height: 20rem;
+    background-color: #a8763e;
+}
+
+.card-list{
+    min-height: 10vh;
+    width: 100%;
+    padding: 3rem;
+}
+
+#toggleViewBtn{
+    background-color: white;
+    font-family: "raleway";
+    border: 1px solid black;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+.filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+.filter-bar input,
+.filter-bar select {
+    padding: 0.5rem;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    min-width: 180px;
+}
+
+/* card-view */
+
+/* Existing card view is unchanged */
+.gateway-grid-section.card-view {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+/* List view overrides */
+.gateway-grid-section.list-view {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+
+
+/* LIST VIEW */
+.gateway-grid-section.list-view {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.gateway-grid-section.list-view .card {
+    display: flex;
+    flex-direction: row;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 2px 1px 4px rgb(0, 0, 0);
+    max-width: 100%;
+    max-height: 3rem;
+    border: 1px solid black;
+}
+
+.gateway-grid-section.list-view .card-img {
+    width: 50px;
+    flex-shrink: 0;
+}
+
+.gateway-grid-section.list-view .card-img img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.gateway-grid-section.list-view .card-text {
+    padding: 10px;
+    font-size: 0.85rem;
+    gap: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.gateway-grid-section.list-view .card-text h3 {
+    font-size: 1rem;
+    margin: 0 0 0.2rem;
+    font-family: "raleway";
+}
+
+.gateway-grid-section.list-view .card-text p {
+    margin: 0;
+    line-height: 1.4;
+        font-family: "raleway";
+}
+
+.gateway-grid-section.list-view .performance {
+    display: flex;
+    gap: 1rem;
+    margin-top: 0.25rem;
+    font-size: 0.75rem;
+        font-family: "raleway";
+}
+
+.card-text h3,
+.card-text p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* Desktop mode */
 @media (min-width: 768px) {
+
     nav {
         flex-direction: row;
         align-items: center;
         justify-content: space-between;
-        height: 6rem;
+        height: 7rem;
     }
 
+
     header {
-        background-color: none;
-        overflow-y: hidden;
+        background-color: transparent;
+        position: absolute;
+        z-index: 1;
+        overflow: hidden;
+        width: 100vw;
+        left: 0;
+        top: 0;
+        right: 0;
+        height: auto;
+        max-height: none;
+    }
+
+    /* Add this to prevent body overflow */
+    body {
+        overflow-x: hidden;
+        position: relative;
+        /* Creates containing block for absolute header */
     }
 
     .menu-toggle {
@@ -252,16 +459,27 @@ nav a{
         margin: 0;
         opacity: 1 !important;
         pointer-events: auto;
+        margin-right: 2rem;
+    }
+
+    nav a{
+        color: white;
     }
 
     .nav-top {
-        height: auto;
+        max-height: 7rem;
         flex-direction: row;
         width: 50%;
+        overflow: hidden;
     }
 
-    .nav-top img {
-        height: 8rem;
+    .nav-top-img {
+        height: 100%;
+        background-size: cover;
+        background-position: left center;
+        background-size: auto 100%;
+        background-repeat: no-repeat;
+        background-image: url(Ty&Aiden-white.png);
     }
 
     nav a {
