@@ -84,28 +84,61 @@ const airportMapping = {
 
 // Global variables for pagination
 let filteredFlights = [];
+ 
+// Constants for localStorage keys
+const STORAGE_KEYS = {
+    RECENT_AIRLINES: 'recentAirlines',
+    RECENT_ROUTES: 'recentRoutes',
+    DARK_MODE: 'darkMode'
+};
 
+// Function to save an item to localStorage with a limit
+function saveToStorage(key, value, limit = 5) {
+    let items = JSON.parse(localStorage.getItem(key) || '[]');
+    if (items.includes(value)) {
+        items = items.filter(item => item !== value);
+    }
+    items.unshift(value);
+    if (items.length > limit) {
+        items = items.slice(0, limit);
+    }
+    localStorage.setItem(key, JSON.stringify(items));
+}
 
+// Function to get items from storage
+function getFromStorage(key) {
+    return JSON.parse(localStorage.getItem(key) || '[]');
+}
+
+// Function to update the recent items display
+function updateRecentItemsDisplay() {
+    const recentAirlines = getFromStorage(STORAGE_KEYS.RECENT_AIRLINES);
+    const recentRoutes = getFromStorage(STORAGE_KEYS.RECENT_ROUTES);
+    
+    // You can update your UI here with the recent items
+    // For example, add them to a dropdown or display them in a list
+}
+
+// Add dark mode toggle functionality
 const darkModeSwitch = document.getElementById('dark-mode-switch');
 const body = document.body;
- 
- 
+
 // Check if dark mode is saved in localStorage
-if (localStorage.getItem('darkMode') === 'true') {
+const savedDarkMode = localStorage.getItem(STORAGE_KEYS.DARK_MODE);
+if (savedDarkMode === 'true') {
     body.classList.add('dark-mode');
     darkModeSwitch.checked = true;
 }
- 
- 
+
 // Add event listener for the dark mode toggle
 if (darkModeSwitch) {
     darkModeSwitch.addEventListener('change', () => {
         if (darkModeSwitch.checked) {
             body.classList.add('dark-mode');
-            localStorage.setItem('darkMode', 'true');
+            localStorage.setItem(STORAGE_KEYS.DARK_MODE, 'true');
         } else {
             body.classList.remove('dark-mode');
-            localStorage.setItem('darkMode', 'false');
+            localStorage.setItem(STORAGE_KEYS.DARK_MODE, 'false');
         }
     });
 }
@@ -155,8 +188,18 @@ async function fetchFlightData() {
             })
         );
         
-        // Reset pagination when new search is performed
-        currentPage = 1;
+        // Save recent search
+        if (fromInput && toInput) {
+            saveToStorage(STORAGE_KEYS.RECENT_ROUTES, `${fromInput}-${toInput}`);
+        }
+        
+        // Save recent airline
+        if (filteredFlights.length > 0) {
+            const uniqueAirlines = [...new Set(filteredFlights.map(f => f.airline))];
+            uniqueAirlines.forEach(airline => {
+                saveToStorage(STORAGE_KEYS.RECENT_AIRLINES, airline);
+            });
+        }
         
         // Display the first page of results
         displayFlightData(filteredFlights);
@@ -208,18 +251,91 @@ function displayFlightData(flights) {
             
             // Create cells for each data point
             const cells = [
-                { label: 'Origin', value: `${airportMapping[flight.origin] || flight.origin} (${flight.origin})` },
-                { label: 'Destination', value: `${airportMapping[flight.destination] || flight.destination} (${flight.destination})` },
-                { label: 'Airline', value: flight.airline },
-                { label: 'Departure', value: new Date(flight.departure).toLocaleString() },
-                { label: 'Arrival', value: new Date(flight.arrival).toLocaleString() },
-                { label: 'Distance/Duration', value: `${flight.distance} mi / ${flight.duration}h` },
-                { label: 'On Time %', value: `${flight.onTimePercentage}%` },
-                { label: 'Departure Terminal', value: flight.departureTerminal },
-                { label: 'Arrival Terminal', value: flight.arrivalTerminal },
-                { label: 'Status', value: flight.status },
-                { label: 'Flight Number', value: flight.flightNumber },
-                { label: 'Aircraft', value: flight.aircraft }
+                { 
+                    label: 'Origin', 
+                    value: `
+                        <span class="icon">🛫</span>
+                        ${airportMapping[flight.origin] || flight.origin} (${flight.origin})
+                    `
+                },
+                { 
+                    label: 'Destination', 
+                    value: `
+                        <span class="icon">🛬</span>
+                        ${airportMapping[flight.destination] || flight.destination} (${flight.destination})
+                    `
+                },
+                { 
+                    label: 'Airline', 
+                    value: `
+                        ${flight.airline}
+                    `
+                },
+                { 
+                    label: 'Departure', 
+                    value: new Date(flight.departure).toLocaleString(),
+                    classes: 'time-indicator'
+                },
+                { 
+                    label: 'Arrival', 
+                    value: new Date(flight.arrival).toLocaleString(),
+                    classes: 'time-indicator'
+                },
+                { 
+                    label: 'Distance/Duration', 
+                    value: `
+                        <div class="distance-indicator">
+                            <span class="icon">🌍</span>
+                            ${flight.distance} mi / ${flight.duration}h
+                        </div>
+                    `,
+                    classes: getDistanceClass(flight.distance)
+                },
+                { 
+                    label: 'On Time %', 
+                    value: `
+                        <div class="on-time-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill ${getOnTimeColor(flight.onTimePercentage)}" 
+                                    style="width: ${flight.onTimePercentage}%;"></div>
+                            </div>
+                            <span class="on-time-text">${flight.onTimePercentage}%</span>
+                        </div>
+                    `   
+                },
+                { 
+                    label: 'Departure Terminal', 
+                    value: `
+                        ${flight.departureTerminal}
+                    `
+                },
+                { 
+                    label: 'Arrival Terminal', 
+                    value: `
+                        ${flight.arrivalTerminal}
+                    `
+                },
+                { 
+                    label: 'Status', 
+                    value: `
+                        <span class="status-icon ${getStatusColor(flight.status)}"></span>
+                        ${flight.status}
+                    `,
+                    classes: getStatusColor(flight.status)
+                },
+                { 
+                    label: 'Flight Number', 
+                    value: `
+                        ${flight.flightNumber}
+                    `
+                },
+                { 
+                    label: 'Aircraft', 
+                    value: `
+                        <span class="icon">✈️</span>
+                        ${flight.aircraft}
+                    `
+                }
             ];
 
             // Create a two-column layout for each cell
@@ -482,4 +598,85 @@ function displayPopularFlights(flights) {
             </div>
         `;
     }).join('');
+}
+
+const menuToggle = document.getElementById('menu-toggle');
+const navLinks = document.getElementById('nav-links');
+const navLinkItems = navLinks.querySelectorAll('a');
+const header = document.querySelector('header');
+
+menuToggle.addEventListener('click', () => {
+    navLinks.classList.toggle('active');
+    menuToggle.classList.toggle('active');
+    header.classList.toggle('menu-open');
+});
+
+navLinkItems.forEach(link => {
+    link.addEventListener('click', () => {
+        navLinks.classList.remove('active');
+        menuToggle.classList.remove('active');
+        header.classList.remove('menu-open');
+    });
+});
+
+function displayRecentItems() {
+    const recentAirlines = getFromStorage(STORAGE_KEYS.RECENT_AIRLINES);
+    const recentRoutes = getFromStorage(STORAGE_KEYS.RECENT_ROUTES);
+    
+    // Create a section to display recent items
+    const recentItemsContainer = document.createElement('div');
+    recentItemsContainer.className = 'recent-items';
+    
+    // Add recent airlines
+    if (recentAirlines.length > 0) {
+        const airlinesSection = document.createElement('div');
+        airlinesSection.className = 'recent-section';
+        airlinesSection.innerHTML = `
+            <h3>Recent Airlines</h3>
+            <div class="recent-items-list">
+                ${recentAirlines.map(airline => 
+                    `<div class="recent-item" onclick="selectRecentAirline('${airline}')">${airline}</div>`
+                ).join('')}
+            </div>
+        `;
+        recentItemsContainer.appendChild(airlinesSection);
+    }
+    
+    // Add recent routes
+    if (recentRoutes.length > 0) {
+        const routesSection = document.createElement('div');
+        routesSection.className = 'recent-section';
+        routesSection.innerHTML = `
+            <h3>Recent Routes</h3>
+            <div class="recent-items-list">
+                ${recentRoutes.map(route => {
+                    const [from, to] = route.split('-');
+                    return `<div class="recent-item" onclick="selectRecentRoute('${from}', '${to}')">
+                        ${airportMapping[from]} (${from}) → ${airportMapping[to]} (${to})
+                    </div>`;
+                }).join('')}
+            </div>
+        `;
+        recentItemsContainer.appendChild(routesSection);
+    }
+    
+    // Add to the DOM where you want to show recent items
+    // For example, you might want to add this to your search results container
+    const container = document.getElementById('data-container');
+    container.insertBefore(recentItemsContainer, container.firstChild);
+}
+
+// Helper functions to select recent items
+function selectRecentAirline(airline) {
+    // You can implement this to auto-select the airline in your search
+    console.log('Selected recent airline:', airline);
+}
+
+function selectRecentRoute(from, to) {
+    // You can implement this to auto-fill the search fields
+    const fromSelect = document.getElementById('from-location');
+    const toSelect = document.getElementById('to-location');
+    fromSelect.value = from;
+    toSelect.value = to;
+    fetchFlightData();
 }

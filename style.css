@@ -897,126 +897,70 @@ button:active {
     transform: translateY(1px);
 } 
 
-/* Status Colors */
-.status-red { color: #e74c3c; }
-.status-green { color: #2ecc71; }
-.status-gray { color: #95a5a6; }
+/* Icons and indicators */
+.location-icon,
+.airline-icon,
+.time-icon,
+.terminal-icon,
+.flight-number-icon,
+.aircraft-icon {
+    color: #3498db;
+    margin-right: 5px;
+    font-size: 1.2em;
+}
 
-/* On-Time Percentage Colors */
-.on-time-green { color: #2ecc71; }
-.on-time-yellow { color: #f1c40f; }
-.on-time-red { color: #e74c3c; }
-
-/* Status indicators */
-.status-indicator {
+.status-icon {
     display: inline-block;
-    width: 10px;
-    height: 10px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
     margin-right: 5px;
 }
 
-.status-indicator.status-red { background-color: #e74c3c; }
-.status-indicator.status-green { background-color: #2ecc71; }
-.status-indicator.status-gray { background-color: #95a5a6; }
-
-/* On-time percentage indicators */
-.on-time-percentage {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
+.status-red {
+    background-color: #ff4444;
 }
 
-.on-time-percentage .progress-bar {
-    width: 80px;
-    height: 6px;
+.status-green {
+    background-color: #4CAF50;
+}
+
+.status-gray {
+    background-color: #666;
+}
+
+.progress-bar {
+    width: 100px;
+    height: 8px;
     background-color: #e0e0e0;
-    border-radius: 3px;
-    overflow: hidden;
-    margin-right: 5px;
+    border-radius: 4px;
+    margin-bottom: 5px;
 }
 
-.on-time-percentage .progress-fill {
+.progress-fill {
     height: 100%;
+    border-radius: 4px;
     transition: width 0.3s ease;
 }
 
-.on-time-percentage .progress-fill.on-time-green { background-color: #2ecc71; }
-.on-time-percentage .progress-fill.on-time-yellow { background-color: #f1c40f; }
-.on-time-percentage .progress-fill.on-time-red { background-color: #e74c3c; }
-
-.on-time-percentage .on-time-text {
-    font-weight: 500;
-    font-size: 0.9rem;
+.on-time-green {
+    background-color: #4CAF50;
 }
 
-/* Distance indicators */
-.distance-indicator {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
+.on-time-yellow {
+    background-color: #ffd000;
 }
 
-.distance-indicator .distance-circle {
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    background-color: #e0e0e0;
-    border: 2px solid #333;
-    transition: transform 0.3s ease;
+.on-time-red {
+    background-color: #ff4444;
 }
 
-.distance-indicator.long-distance .distance-circle {
-    transform: scale(1.2);
-    background-color: #3498db;
+.on-time-text {
+    font-weight: bold;
 }
 
-/* Location indicators */
-.location-indicator {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.location-indicator .location-icon {
-    color: #3498db;
-    font-size: 1.2em;
-}
-
-/* Airline indicators */
-.airline-indicator {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.airline-indicator .airline-icon {
-    color: #2ecc71;
-    font-size: 1.2em;
-}
-
-/* Flight number indicators */
-.flight-number-indicator {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.flight-number-indicator .flight-number-icon {
-    color: #9b59b6;
-    font-size: 1.2em;
-}
-
-/* Aircraft indicators */
-.aircraft-indicator {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.aircraft-indicator .aircraft-icon {
-    color: #3498db;
-    font-size: 1.2em;
+.distance-icon {
+    margin-right: 5px;
 }
 
 /* Responsive adjustments for indicators */
@@ -1043,4 +987,12 @@ button:active {
     .aircraft-indicator .aircraft-icon {
         font-size: 1em;
     }
+}
+
+.recent-items {
+    margin: 20px 0;
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }

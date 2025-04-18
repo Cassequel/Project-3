@@ -11,6 +11,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Caesar+Dressing&family=Cinzel:wght@400..900&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Forum&family=Gloock&family=IM+Fell+English:ital@0;1&family=Raleway:ital,wght@0,100..900;1,100..900&family=Shrikhand&family=Special+Gothic+Condensed+One&display=swap" rel="stylesheet">
 </head>
 <body data-cards-limit="auto-rows">
+    <div class="plane-flyby">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" width="40" height="40" fill="#000">
+          <path d="M480 192H365.71L260.61 8.38C256.19.84 247.36-2.27 239.57 1.67S224 14.35 224 22.63V192H144L103.12 144H48c-8.84 0-16 7.16-16 16v32c0 8.84 7.16 16 16 16h55.12L144 256h80v169.38c0 8.29 5.16 15.76 13.57 19.71s16.62.17 20.95-7.38L365.71 320H480c35.35 0 64-28.65 64-64s-28.7-64-64-64z"/>
+        </svg>
+      </div>
+      
     <section class="hero-section">
         <header id="main-header">
             <nav>
@@ -25,7 +31,7 @@
                 <div class="nav-links" id="nav-links">
                     <a href="database.html">Flights</a>
                     <a href="airlines.html">Airlines</a>
-                    <a href="#footer">About Us</a>
+                    <a href="About-us.html">About Us</a>
                 </div>
             </nav>
         </header>
@@ -115,14 +121,8 @@
             var divElement = document.getElementById('viz1744854861637');                    var vizElement = divElement.getElementsByTagName('object')[0];                    vizElement.style.width='100%';vizElement.style.height=(divElement.offsetWidth*0.75)+'px';                    var scriptElement = document.createElement('script');                    scriptElement.src = 'https://public.tableau.com/javascripts/api/viz_v1.js';                    vizElement.parentNode.insertBefore(scriptElement, vizElement);                
         </script>
     </section>
-    <footer>
-        <div class="toggle-container switch-container">
-            <h4 class="switch-label">Dark Mode</h4>
-            <label for="dark-mode-switch" class="switch" aria-label="Toggle dark mode">
-            <input type="checkbox" id="dark-mode-switch">
-            <span class="slider round"></span>
-        </label>
-        </div>
+    <footer id="footer">
+
     </footer>
     <script src="script.js"></script>
 </body>

@@ -19,6 +19,33 @@ section{
 } */
 
 
+.plane-flyby {
+    position: fixed;
+    top: 30px;
+    left: -60px;
+    z-index: 10000;
+    pointer-events: none;
+    animation: flyby 2.2s ease-in-out forwards;
+  }
+  
+  @keyframes flyby {
+    0% {
+      transform: translateX(0);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(110vw);
+      opacity: 0;
+    }
+  }
+  
+
 a{
     font-family: "raleway";
     text-decoration: none;
@@ -114,6 +141,7 @@ nav a{
     flex-direction: column;
     align-items: center;
     gap: 10px;
+    z-index: 2;
     opacity: 0;
     overflow: hidden;
     transition: opacity 0.3s ease;
@@ -147,7 +175,6 @@ nav a{
 
 .quote-content{
     position: relative;
-    z-index: 2;
     min-height: 90vh;
     display: flex;
     flex-direction: column;
@@ -435,6 +462,16 @@ footer {
     font-family: "raleway";
 }
 
+.metric-red {
+    color: #d9534f;
+}
+.metric-yellow {
+    color: #f0ad4e;
+}
+.metric-green{
+    color: #5cb85c;
+}
+
 /* Desktop mode */
 @media (min-width: 768px) {
 
@@ -476,11 +513,13 @@ footer {
         margin: 0;
         opacity: 1 !important;
         margin-right: 2rem;
+        z-index: 100;
     }
 
     .nav-links a{
         color: white;
         font-family: "raleway";
+        pointer-events: auto;
 
     }
 

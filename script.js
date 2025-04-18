@@ -23,25 +23,72 @@ let allAirlines = [];
 
 let currentView = 'card';
 
+function getColorClass(value, { green, yellow }) {
+    if (green(value)) return 'metric-green';
+    else if (yellow(value)) return 'metric-yellow';
+    else return 'metric-red';
+  }
+  
+
 function createAirlineCard(airline) {
+    const onTimeClass = getColorClass(airline.recent_performance.on_time_percentage, {
+        green: v => v >= 90,
+        yellow: v => v >= 80 && v < 90,
+      });
+      
+      const cancelClass = getColorClass(airline.recent_performance.cancellation_rate, {
+        green: v => v < 1,
+        yellow: v => v >= 1 && v <= 3,
+      });
+      
+      const satisfactionClass = getColorClass(airline.recent_performance.customer_satisfaction, {
+        green: v => v >= 4,
+        yellow: v => v >= 3 && v < 4,
+      });
+      
+  
     return `
-        <div class="card" data-airline="${airline.airline_id}">
-            <div class="card-img">
-                <img src="${airline.logo}" alt="${airline.name} logo" />
-            </div>
-            <div class="card-text">
-                <h3 class="airline-name">${airline.name}</h3>
-                <p><strong>Headquarters:</strong> ${airline.headquarters}</p>
-                <p><strong>Airline ID:</strong> ${airline.airline_id}</p>
-                <div class="performance">
-                    <p><strong>On-Time %:</strong> ${airline.recent_performance.on_time_percentage}%</p>
-                    <p><strong>Cancellation %:</strong> ${airline.recent_performance.cancellation_rate}%</p>
-                    <p><strong>Satisfaction:</strong> ${airline.recent_performance.customer_satisfaction} Stars</p>
-                </div>
-            </div>
+      <div class="card" data-airline="${airline.airline_id}">
+        <div class="card-img">
+          <img src="${airline.logo}" alt="${airline.name} logo" />
         </div>
+        <div class="card-text">
+          <h3 class="airline-name">${airline.name}</h3>
+          <p><strong>Headquarters:</strong> ${airline.headquarters}</p>
+          <p><strong>Airline ID:</strong> ${airline.airline_id}</p>
+          <div class="performance">
+            <p><strong>On-Time %:</strong> <span class="count ${onTimeClass}" data-value="${airline.recent_performance.on_time_percentage}">0</span>%</p>
+            <p><strong>Cancellation %:</strong> <span class="count ${cancelClass}" data-value="${airline.recent_performance.cancellation_rate}">0</span>%</p>
+            <p><strong>Satisfaction:</strong> <span class="count ${satisfactionClass}" data-value="${airline.recent_performance.customer_satisfaction}">0</span> Stars</p>
+          </div>
+        </div>
+      </div>
     `;
 }
+
+function countUp(el, target, duration = 800) {
+    let start = 0;
+    const increment = target / (duration / 16); // ~60fps
+    const update = () => {
+      start += increment;
+      if (start >= target) {
+        el.textContent = target % 1 === 0 ? target : target.toFixed(1);
+      } else {
+        el.textContent = target % 1 === 0 ? Math.floor(start) : start.toFixed(1);
+        requestAnimationFrame(update);
+      }
+    };
+    update();
+}
+
+function animateAllCounts() {
+    document.querySelectorAll('.card .count').forEach(span => {
+      const target = parseFloat(span.dataset.value);
+      countUp(span, target);
+    });
+}
+  
+  
 
 function filterAndRenderAirlines() {
     const grid = document.getElementById('airlineGrid');
@@ -57,6 +104,7 @@ function filterAndRenderAirlines() {
     });
 
     grid.innerHTML = filtered.map(createAirlineCard).join('');
+    animateCardsIn();
 }
 
 function getCardsPerRow(containerSelector, cardClass) {
@@ -76,27 +124,30 @@ function renderAirlines(airlines, limit) {
     requestAnimationFrame(() => {
         observeCards(); // Always re-observe
     });
+    animateAllCounts();
 }
 
-  let cardObserver = null;
+let cardObserver = null;
 
-  function observeCards() {
-      if (cardObserver) cardObserver.disconnect();
+function observeCards() {
+    if (cardObserver) cardObserver.disconnect();
   
-      const cards = document.querySelectorAll('.card');
-      cardObserver = new IntersectionObserver((entries, obs) => {
-          entries.forEach(entry => {
-              if (entry.isIntersecting) {
-                  entry.target.classList.add('animate-in');
-                  obs.unobserve(entry.target);
-              }
-          });
-      }, { threshold: 0.1 });
+    const cards = document.querySelectorAll('.card');
+    cardObserver = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-in');
   
-      cards.forEach(card => cardObserver.observe(card)); // ✅ Fix: this was using wrong variable
-  }
+          obs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
   
-  document.addEventListener('DOMContentLoaded', () => {
+    cards.forEach(card => cardObserver.observe(card));
+}
+  
+  
+document.addEventListener('DOMContentLoaded', () => {
     const grid = document.getElementById('airlineGrid');
     const toggleBtn = document.getElementById('toggleViewBtn');
     const cardLimitAttr = document.body.getAttribute('data-cards-limit');
@@ -114,7 +165,7 @@ function renderAirlines(airlines, limit) {
         });
     }
 
-    fetch('./flights.json')
+fetch('./flights.json')
         .then(response => {
             if (!response.ok) throw new Error('Network response was not ok');
             return response.json();
@@ -151,7 +202,7 @@ function renderAirlines(airlines, limit) {
                             }
                         }
 
-                        const limit = cardsInTwoRows.length;
+                        const limit = Math.max(cardsInTwoRows.length, 8);
                         renderAirlines(allAirlines, limit);
                     });
                 }, 50);
@@ -177,8 +228,30 @@ window.addEventListener('resize', () => {
 
 
 
-setTimeout(() => {
-    document.querySelectorAll('.card').forEach(card => {
-      card.classList.add('animate-in');
-    });
-  }, 100);
+
+
+function animateCardsIn() {
+    setTimeout(() => {
+      document.querySelectorAll('.card').forEach(card => {
+        card.classList.add('animate-in');
+      });
+    }, 50); // You can even use 50ms for faster response
+    setTimeout(() => {
+        document.querySelectorAll('.card').forEach(card => {
+          card.classList.add('animate-in');
+        });
+        animateAllCounts(); // 🔥 trigger all counters at the same time
+      }, 100);
+  }
+  
+
+function triggerPlaneFlyby() {
+    const clone = document.querySelector('.plane-flyby').cloneNode(true);
+    document.body.appendChild(clone);
+  
+    // Remove it after animation completes
+    setTimeout(() => {
+      clone.remove();
+    }, 2500);
+}
+  
