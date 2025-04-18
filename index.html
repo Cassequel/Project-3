@@ -10,9 +10,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Caesar+Dressing&family=Cinzel:wght@400..900&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Forum&family=Gloock&family=IM+Fell+English:ital@0;1&family=Raleway:ital,wght@0,100..900;1,100..900&family=Shrikhand&family=Special+Gothic+Condensed+One&display=swap" rel="stylesheet">
 </head>
-<body data-cards-limit="8">
+<body data-cards-limit="auto-rows">
     <section class="hero-section">
-        <header>
+        <header id="main-header">
             <nav>
                 <div class="nav-top">
                     <div class="nav-top-img"></div>
@@ -23,10 +23,9 @@
                     </div>
                 </div>
                 <div class="nav-links" id="nav-links">
-                    <a href="#">Data</a>
-                    <a href="#">Popular Routes</a>
-                    <a href="#">About Us</a>
-                    <a href="#">Flight Data</a>
+                    <a href="database.html">Flights</a>
+                    <a href="airlines.html">Airlines</a>
+                    <a href="#footer">About Us</a>
                 </div>
             </nav>
         </header>
@@ -42,7 +41,7 @@
                     <h1>Powering Frictionless Travel in a Data-Driven World</h1>
                 </div>
                 <div class="quote-buttons">
-                    <a href="#">Find A Flight</a>
+                    <a href="database.html">Find A Flight</a>
                     <a href="#airports">Search Airports</a>
                 </div>
             </div>
@@ -117,7 +116,13 @@
         </script>
     </section>
     <footer>
-
+        <div class="toggle-container switch-container">
+            <h4 class="switch-label">Dark Mode</h4>
+            <label for="dark-mode-switch" class="switch" aria-label="Toggle dark mode">
+            <input type="checkbox" id="dark-mode-switch">
+            <span class="slider round"></span>
+        </label>
+        </div>
     </footer>
     <script src="script.js"></script>
 </body>

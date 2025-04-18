@@ -17,6 +17,12 @@
         });
     });
 
+
+
+let allAirlines = [];
+
+let currentView = 'card';
+
 function createAirlineCard(airline) {
     return `
         <div class="card" data-airline="${airline.airline_id}">
@@ -37,8 +43,6 @@ function createAirlineCard(airline) {
     `;
 }
 
-let allAirlines = [];
-
 function filterAndRenderAirlines() {
     const grid = document.getElementById('airlineGrid');
     const searchValue = document.getElementById('searchInput').value.toLowerCase();
@@ -55,9 +59,60 @@ function filterAndRenderAirlines() {
     grid.innerHTML = filtered.map(createAirlineCard).join('');
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+function getCardsPerRow(containerSelector, cardClass) {
+    const container = document.querySelector(containerSelector);
+    const card = container.querySelector(`.${cardClass}`);
+    if (!card) return 4;
+    const containerWidth = container.clientWidth;
+    const cardWidth = card.offsetWidth;
+    return Math.floor(containerWidth / cardWidth) || 1;
+}
+
+function renderAirlines(airlines, limit) {
     const grid = document.getElementById('airlineGrid');
+    const limited = airlines.slice(0, limit); // ✅ Add this line
+    grid.innerHTML = limited.map(createAirlineCard).join('');
+
+    requestAnimationFrame(() => {
+        observeCards(); // Always re-observe
+    });
+}
+
+  let cardObserver = null;
+
+  function observeCards() {
+      if (cardObserver) cardObserver.disconnect();
+  
+      const cards = document.querySelectorAll('.card');
+      cardObserver = new IntersectionObserver((entries, obs) => {
+          entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                  entry.target.classList.add('animate-in');
+                  obs.unobserve(entry.target);
+              }
+          });
+      }, { threshold: 0.1 });
+  
+      cards.forEach(card => cardObserver.observe(card)); // ✅ Fix: this was using wrong variable
+  }
+  
+  document.addEventListener('DOMContentLoaded', () => {
+    const grid = document.getElementById('airlineGrid');
+    const toggleBtn = document.getElementById('toggleViewBtn');
     const cardLimitAttr = document.body.getAttribute('data-cards-limit');
+
+    // Set default layout class
+    grid.classList.add('card-view');
+
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+            currentView = currentView === 'card' ? 'list' : 'card';
+            grid.classList.toggle('card-view');
+            grid.classList.toggle('list-view');
+            toggleBtn.textContent = currentView === 'card' ? 'Switch to List View' : 'Switch to Card View';
+            observeCards();
+        });
+    }
 
     fetch('./flights.json')
         .then(response => {
@@ -68,15 +123,41 @@ document.addEventListener('DOMContentLoaded', () => {
             allAirlines = data.data.airlines;
 
             if (cardLimitAttr === 'all') {
-                // Render all with filters
                 filterAndRenderAirlines();
                 document.getElementById('searchInput').addEventListener('input', filterAndRenderAirlines);
                 document.getElementById('onTimeFilter').addEventListener('change', filterAndRenderAirlines);
                 document.getElementById('cancelFilter').addEventListener('change', filterAndRenderAirlines);
+            } else if (cardLimitAttr === 'auto-rows') {
+                // Render one temporary card to measure size
+                grid.innerHTML = createAirlineCard(allAirlines[0]);
+
+                setTimeout(() => {
+                    requestAnimationFrame(() => {
+                        const cards = grid.querySelectorAll('.card');
+                        if (cards.length === 0) return;
+
+                        const firstCardTop = cards[0].offsetTop;
+                        let rowCount = 1;
+                        let cardsInTwoRows = [];
+
+                        for (let card of cards) {
+                            if (card.offsetTop > firstCardTop && rowCount === 1) {
+                                rowCount++;
+                            }
+                            if (rowCount <= 2) {
+                                cardsInTwoRows.push(card);
+                            } else {
+                                break;
+                            }
+                        }
+
+                        const limit = cardsInTwoRows.length;
+                        renderAirlines(allAirlines, limit);
+                    });
+                }, 50);
             } else {
-                // Render only first 4
-                const limited = allAirlines.slice(0, parseInt(cardLimitAttr));
-                grid.innerHTML = limited.map(createAirlineCard).join('');
+                const limit = parseInt(cardLimitAttr);
+                renderAirlines(allAirlines, limit);
             }
         })
         .catch(error => {
@@ -85,19 +166,19 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 });
 
-let currentView = 'card'; // default
-
-const toggleBtn = document.getElementById('toggleViewBtn');
-const grid = document.getElementById('airlineGrid');
-
-// Set default class
-grid.classList.add('card-view');
-
-toggleBtn.addEventListener('click', () => {
-    currentView = currentView === 'card' ? 'list' : 'card';
-    grid.classList.toggle('card-view');
-    grid.classList.toggle('list-view');
-
-    toggleBtn.textContent = currentView === 'card' ? 'Switch to List View' : 'Switch to Card View';
+// ✅ Fixes placement of resize listener — outside DOMContentLoaded
+window.addEventListener('resize', () => {
+    if (document.body.getAttribute('data-cards-limit') === 'auto-rows') {
+        const perRow = getCardsPerRow('#airlineGrid', 'card');
+        const limit = perRow * 2;
+        renderAirlines(allAirlines, limit);
+    }
 });
 
+
+
+setTimeout(() => {
+    document.querySelectorAll('.card').forEach(card => {
+      card.classList.add('animate-in');
+    });
+  }, 100);

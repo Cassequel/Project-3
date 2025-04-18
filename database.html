@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Document</title>
+   <link rel="stylesheet" href="style.css">
+   <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+
+    <header style="background-color: #353d2f;">
+        <nav>
+            <div class="nav-top">
+                <div class="nav-top-img"></div>
+                <div class="menu-toggle" id="menu-toggle">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+            <div class="nav-links" id="nav-links">
+                <a href="index.html">Home</a>
+                <a href="#">Popular Routes</a>
+                <a href="#">About Us</a>
+                <a href="#">Flight Data</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="divider"></div>
+
+
+   <section class="search-flights-section">
+       <div class="container">
+           <h2>Find Your Flight</h2>
+           <div class="input-container">
+               <select id="from-location" name="from_location">
+                   <option value="">Select Origin</option>
+               </select>
+               <select id="to-location" name="to_location">
+                   <option value="">Select Destination</option>
+               </select>
+           </div>
+           <button id="search-flights">Search Flights</button>
+       </div>
+   </section>
+   <section class="flight-results-section">
+       <div class="search-results-container">
+           <div class="flight-results-wrapper">
+               <div id="loader" class="loader hidden"></div>
+               <div id="data-container" class="flight-results"></div>
+               <div class="pagination-controls">
+                    <button id="prevPage" class="pagination-button" disabled>&laquo; Previous</button>
+                    <span id="pageInfo">Page 1 of 1</span>
+                    <button id="nextPage" class="pagination-button" disabled>Next &raquo;</button>
+            </div>
+           </div>
+       </div>
+   </section>
+   <section>
+       <div class="popular-flights">
+           <h3>Popular flights from</h3>
+           <div class="input-container">
+               <select id="popular-origin" name="from_location">
+                   <option value="">Select Origin</option>
+               </select>
+               <button id="search-popular">Go</button>
+           </div>
+           <div class="popular-flights-list">
+               <div id="popular-flights-container" class="scrollable-container"></div>
+           </div>
+       </div>
+   </section>
+   <footer>
+       <div class="toggle-container switch-container">
+           <h4 class="switch-label">Dark Mode</h4>
+           <label for="dark-mode-switch" class="switch" aria-label="Toggle dark mode">
+           <input type="checkbox" id="dark-mode-switch">
+           <span class="slider round"></span>
+       </label>
+       </div>
+   </footer>
+   <script type="text/javascript" src="main.js"></script>
+</body>
+</html>
